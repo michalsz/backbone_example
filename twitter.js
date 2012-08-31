@@ -14,7 +14,7 @@ var Tweet = Backbone.Model.extend({
  var TweetView = Backbone.View.extend({
  	tagName: 'div',
   className: 'tweet',
-  template: _.template('<img class="avatar thumbnail"/><strong class="user"></strong><img src="img/bird_blue_32.png" /><p class="t_text"></p><a class="retweet" href="">Retweet</a>'),
+  template: _.template('<img class="avatar thumbnail"/><strong class="user"></strong><img src="img/bird_blue_32.png" /><p class="t_text"></p><span class="geo"></span><a class="retweet" href="">Retweet</a>'),
  	events: {
  		"click": "remove"
  	},
@@ -37,6 +37,13 @@ var Tweet = Backbone.Model.extend({
       this.$('.user').html('@' + content);
       var content = this.model.get('text');
       this.$('.t_text').html(content);
+      var geo = this.model.get('geo');
+      if(geo){
+        console.log( geo.coordinates[0] + '- ' + geo.coordinates[1] + ' geo ' + JSON.stringify(geo));
+        this.$('.geo').html('Geo :' + geo.coordinates[0] + ' ' + geo.coordinates[1]);
+
+        putMarker(geo.coordinates[0], geo.coordinates[1]);
+      }
       var content = this.model.get('id');
       this.$('.retweet').attr('href', 'https://twitter.com/intent/retweet?tweet_id=' + content);
     },
@@ -79,8 +86,6 @@ var AppView = Backbone.View.extend({
              }
              console.log('added all tweet ...');
         });
-
-       //$('#tweets').append(tweetsHtml);
   },
 
   search: function () {
