@@ -1,17 +1,18 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Backbone</title>
+    <title>Sport trends in Twitter</title>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <script type="text/javascript" src="underscore.js"></script>
-    <script type="text/javascript" src="jquery-1.8.0.min.js"></script>
-    <script type="text/javascript" src="backbone.js"></script>
+    <script type="text/javascript" src="lib/underscore.js"></script>
+    <script type="text/javascript" src="lib/jquery/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="lib/backbone/backbone.js"></script>
     <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="lib/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <style type="text/css">
+      body div.container form input{margin-bottom:0;}
       #friends-list li{font-size:20px;padding:4px 0 4px 0;border: 1 xp solid rgba(82, 168, 236, 0.8); width:200px;}
       #friends-list li i{float:right;cursor:pointer;}
       #tweets {margin:10px 0 0 0;width:500px;float:left;}
@@ -24,6 +25,7 @@
     <script type="text/javascript">
       function initialize() {
         var myLatlng = new google.maps.LatLng(52.216582, 21.022339);
+        markers = [];
         var mapOptions = {
           center: new google.maps.LatLng(52.216582, 21.022339),
           zoom: 2,
@@ -39,42 +41,70 @@
         });
       };
 
-      function putMarker(lat, lng){
-        var myLatlng = new google.maps.LatLng(lat, lng);
+
+      function getUrl(){
+        console.log('cccccccccaaaaaaaaaaaaaaallllll');
+      };
+
+
+      function putMarker(twitt){
+        var geo = twitt.get('geo');
+        var myLatlng = new google.maps.LatLng(geo.coordinates[0], geo.coordinates[1]);
+        
+        var image = new google.maps.MarkerImage(
+            'img/map-icon-twitt.png',
+            new google.maps.Size(32,37),
+            new google.maps.Point(0,0),
+            new google.maps.Point(16,37)
+        );
+
         var marker = new google.maps.Marker({
             position: myLatlng,
             map: map,
-            title:"Hello World!"
+            icon: image,
+            title: twitt.get('text')
         });
+
+        markers.push(marker);
+      };
+
+
+      function removeMarkers(){
+        if (markers) {
+            for (var i = 0; i < markers.length; i++ ) {
+                markers[i].setMap(null);
+            }
+        }
       }
     </script>
 </head>
 <body onload="initialize()">
     <div class="container">
-	   <h1>BACKBONE</h1>
+	   <h1>Sport</h1>
 	   <div id="app">
         </div>
    	
-        <form>
-        <legend>Add friend</legend>
-        <div id="errors" class="alert alert-error"></div>
-        <input type="text" id="friend-name" placeholder="Friend Name" />
-		</form>
-        <button id="add-friend" class="btn btn-success">Add Friend</button>
+        <form onsubmit"javascript:void" action="#">
+            <legend>Add friend</legend>
+            <div id="errors" class="alert alert-error"></div>
+            <input type="text" id="friend-name" placeholder="Friend Name" />
+		    <button id="add-friend" class="btn btn-success">Add Friend</button>
+        </form>
+        
     
         <ul id="friends-list">
         </ul>
 
         <form onsubmit"javascript:void" action="#">
         <legend>Search in twitter</legend>
-        <input type="text" id="search" placeholder="Keyword" value="u2i" />
+        <input type="text" id="search" placeholder="Keyword" value="kraków" />
         <button id="search-btn" class="btn btn-success">Search</button>
         <button id="clear-btn" class="btn btn-danger">Clear</button>
 	    </form>
         <div id="tweets"></div>
         <div id="map"></div>
-        <script src="friend.js"></script>
-        <script src="twitter.js"></script>
+        <script src="lib/models/friend.js"></script>
+        <script src="lib/models/twitter.js"></script>
     </div>
 </body>
 </html>
