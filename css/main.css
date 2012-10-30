@@ -1,0 +1,8 @@
+body div.container form input{margin-bottom:0;}
+#friends-list li{font-size:20px;padding:4px 0 4px 0;border: 1 xp solid rgba(82, 168, 236, 0.8); width:200px;}
+#friends-list li i{float:right;cursor:pointer;}
+#tweets {margin:10px 0 0 0;width:500px;float:left;}
+#tweets .tweet{border:1px solid #00ACEE;width:400px;height:auto;margin:2px;}
+#tweets .tweet img.thumbnail{display:inline;margin-right:10px;}
+#tweets .tweet p{padding:2px;}
+#map {border:1px solid red;width:600px;height:600px;float:right;}
