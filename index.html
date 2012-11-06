@@ -11,60 +11,15 @@
   <script src="lib/bootstrap/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+  <script src="lib/models/tweet.js"></script>
+  <script src="lib/collections/tweets.js"></script>
+  <script src="lib/views/tweet_view.js"></script>
+  <script src="lib/application.js"></script>
+  <script src="lib/google_map.js"></script>
   <link href="css/main.css" rel="stylesheet" />
-  <script type="text/javascript">
-      function initialize() {
-        var myLatlng = new google.maps.LatLng(52.216582, 21.022339);
-        markers = [];
-        var mapOptions = {
-          center: new google.maps.LatLng(52.216582, 21.022339),
-          zoom: 2,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        map = new google.maps.Map(document.getElementById("map"),
-            mapOptions);
-
-        var marker = new google.maps.Marker({
-            position: myLatlng,
-            map: map,
-            title:"Hello World!"
-        });
-      };
-
-
-      function putMarker(twitt){
-        var geo = twitt.get('geo');
-        var myLatlng = new google.maps.LatLng(geo.coordinates[0], geo.coordinates[1]);
-        
-        var image = new google.maps.MarkerImage(
-            'img/map-icon-twitt.png',
-            new google.maps.Size(32,37),
-            new google.maps.Point(0,0),
-            new google.maps.Point(16,37)
-        );
-
-        var marker = new google.maps.Marker({
-            position: myLatlng,
-            map: map,
-            icon: image,
-            title: twitt.get('text')
-        });
-
-        markers.push(marker);
-      };
-
-
-      function removeMarkers(){
-        if (markers) {
-            for (var i = 0; i < markers.length; i++ ) {
-                markers[i].setMap(null);
-            }
-        }
-      }
-    </script>
 </head>
-<body onload="initialize()">
-  <script type="text/template" id="header-template">
+<body>
+  <script type="text/template" id="tweet-template">
     <img class="avatar thumbnail" src="<%= profile_image_url  %>"/>
     <strong class="user">@<%= from_user %></strong>
     <img src="img/bird_blue_32.png" />
@@ -72,8 +27,7 @@
     <span class="geo"></span>
     <a class="retweet" href="https://twitter.com/intent/retweet?tweet_id=<%= id %>">Retweet</a>
   </script>
-
-
+  
   <div class="container">
     <div id="app">
     </div>
@@ -92,11 +46,19 @@
         <input type="text" id="search" placeholder="Keyword" value="kraków" />
         <button id="search-btn" class="btn btn-success">Search</button>
         <button id="clear-btn" class="btn btn-danger">Clear</button>
-	    </form>
+        <button id="save-btn" class="btn btn-success">Save</button>
+      </form>
       <div id="tweets"></div>
       <div id="map"></div>
+
       <script src="lib/models/friend.js"></script>
       <script src="lib/models/twitter.js"></script>
+
+      <script>
+	$(document).ready(function() {
+          initialize();
+	});	
+      </script>
     </div>
   </body>
 </html>
