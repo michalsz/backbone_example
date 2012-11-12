@@ -4,8 +4,7 @@
 	el: $("body"),
 	events: {
 	    "click #search-btn":  "search",
-	    "click #clear-btn":  "clear",    
-	    "click #save-btn":  "save"    
+	    "click #clear-btn":  "clear"    
 	},
 
 	initialize: function(){
@@ -17,6 +16,7 @@
 	    this.keyword = '';
 	    _this = this;
 
+	    this.tweets.on('add', this.added);
 	    this.tweets.bind('reset', function(collection) {
 		// Clear any old tweet renderings
 		//_this.$('#tweets').empty();
@@ -34,13 +34,18 @@
             });
 	},
 
+	added: function(mode, collection){
+	    console.log('added ' + model.get('from_user'));
+	},
+
 	search: function () {
 	    if(this.keyword != $('#search')[0].value){
 		this.clear();
 	    }
 	    this.keyword = $('#search')[0].value;
+	    this.tweets.url = 'http://search.twitter.com/search.json?q=' +  this.keyword + '&callback=?&page=' + this.page;
 	    this.page++;
-	    this.tweets.search(this.keyword, this.page);
+	    this.tweets.fetch();
 	},
 
 	clear: function () {
@@ -49,20 +54,16 @@
 	    removeMarkers();
 	},
 
-	save: function(){
-	    alert('save');
-	},
-
 	addTweet: function(tweet) {
 	    var tweetView = new TweetView({model: tweet})
 	    $('#tweets').append(tweetView.render().el);
 	},
 
 	render: function(){
-	    alert('render');
+	    
 	}
     });
 
-    var appview = new AppView();
+    var appview = new AppView;
 
 })(jQuery);
